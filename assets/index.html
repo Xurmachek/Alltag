@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>AllTag</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ───────────────────────────────── top app bar ───────────────────── -->
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <rect x="1" y="1" width="38" height="38" rx="11" fill="url(#g1)"/>
+        <path d="M15 27V13.4l11-2.2v13.1" stroke="#121212" stroke-width="2.4"
+              fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="12.4" cy="27.6" r="3.3" fill="#121212"/>
+        <circle cx="23.4" cy="25.4" r="3.3" fill="#121212"/>
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="var(--md-primary)"/>
+          <stop offset="1" stop-color="var(--md-primary-dim)"/>
+        </linearGradient></defs>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">AllTag</span>
+        <span class="brand-sub" id="brandSub">аудиотеги</span>
+      </div>
+    </div>
+
+    <div class="toolbar" role="toolbar">
+      <button class="btn tonal" id="btnPick" title="Выбрать папку (Ctrl+O)">
+        <svg viewBox="0 0 24 24" class="ic"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h3.2c.6 0 1.2.24 1.64.68L11.9 6h6.6A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5v-11Z"/></svg>
+        <span>Выбрать папку</span>
+      </button>
+      <button class="btn text" id="btnAdd" title="Добавить папку к списку">
+        <svg viewBox="0 0 24 24" class="ic"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h3.2c.6 0 1.2.24 1.64.68L11.9 6h6.6A2.5 2.5 0 0 1 21 8.5v9A2.5 2.5 0 0 1 18.5 20h-13A2.5 2.5 0 0 1 3 17.5v-11Z"/><path d="M12 9.6v6M9 12.6h6" stroke="var(--md-surface)" class="ic-plus"/></svg>
+        <span>Добавить папку</span>
+      </button>
+
+      <div class="divider-v"></div>
+
+      <button class="btn filled" id="btnSave" title="Сохранить (Ctrl+S)" disabled>
+        <svg viewBox="0 0 24 24" class="ic"><path d="M5 4h11l3 3v13H5V4Zm3 1.5v5h8v-5M8 13.5h8v6H8z"/></svg>
+        <span>Сохранить</span>
+        <span class="dirty-count" id="dirtyCount" hidden>0</span>
+      </button>
+
+      <button class="btn text" id="btnRenamer" title="Конвертер: Имя файла ⇄ Тег (Ctrl+R)">
+        <svg viewBox="0 0 24 24" class="ic"><path d="M4 8h12m0 0-3-3m3 3-3 3M20 16H8m0 0 3-3m-3 3 3 3"/></svg>
+        <span>Имя ⇄ Тег</span>
+      </button>
+
+      <button class="btn text" id="btnExtended" title="Расширенные теги (Ctrl+E)">
+        <svg viewBox="0 0 24 24" class="ic"><path d="M4 6.5h16M4 12h16M4 17.5h10"/></svg>
+        <span>Расширенные теги…</span>
+      </button>
+
+      <div class="divider-v"></div>
+
+      <label class="switch-host" title="Интеграция в контекстное меню Windows">
+        <span class="switch-label">Контекстное меню</span>
+        <input type="checkbox" id="ctxSwitch" class="switch-input">
+        <span class="switch-track"><span class="switch-thumb"></span></span>
+      </label>
+
+      <div class="accent-group" id="accentGroup" title="Акцентный цвет (Material You)">
+        <button class="swatch" data-accent="#D0BCFF" style="--sw:#D0BCFF" aria-label="Фиолетовый"></button>
+        <button class="swatch" data-accent="#A8C7FA" style="--sw:#A8C7FA" aria-label="Синий"></button>
+        <button class="swatch" data-accent="#6DD58C" style="--sw:#6DD58C" aria-label="Изумрудный"></button>
+        <button class="swatch" data-accent="#F2C14E" style="--sw:#F2C14E" aria-label="Янтарный"></button>
+        <button class="swatch" data-accent="#FFB1C8" style="--sw:#FFB1C8" aria-label="Розовый"></button>
+        <label class="swatch custom" title="Свой цвет">
+          <input type="color" id="accentPicker" value="#D0BCFF">
+          <svg viewBox="0 0 24 24" class="ic"><path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.2 0 1.8-.8 1.8-1.7 0-1.6-1.6-1.7-1.6-3 0-1 .8-1.6 2-1.6h1.4a4.9 4.9 0 0 0 4.9-4.9C20.5 5.9 16.7 3.5 12 3.5Z"/><circle cx="8.2" cy="9.4" r="1.2"/><circle cx="12" cy="7.6" r="1.2"/><circle cx="15.7" cy="9.4" r="1.2"/></svg>
+        </label>
+      </div>
+
+      <button class="icon-btn" id="btnMenu" title="Ещё">
+        <svg viewBox="0 0 24 24" class="ic"><circle cx="12" cy="5.5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18.5" r="1.7"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ───────────────────────────────── workspace ─────────────────────── -->
+  <main class="workspace">
+
+    <aside class="editor" id="editor">
+      <div class="art-card">
+        <div class="art-box" id="artBox">
+          <img id="artImage" alt="" hidden>
+          <div class="art-empty" id="artEmpty">
+            <svg viewBox="0 0 24 24" class="ic big"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 18.5v-13Z"/><path d="m4.5 16 4.2-4.2 3.1 3.1 2.6-2.6 5.1 5.2"/><circle cx="15.4" cy="8.6" r="1.5"/></svg>
+            <span>Обложка альбома</span>
+          </div>
+          <div class="art-badge" id="artBadge" hidden></div>
+        </div>
+        <div class="art-actions">
+          <button class="btn text small" id="btnArtLoad" disabled>Загрузить</button>
+          <button class="btn text small" id="btnArtExtract" disabled>Извлечь</button>
+          <button class="btn text small danger" id="btnArtRemove" disabled>Удалить</button>
+          <input type="file" id="artInput" accept="image/jpeg,image/png,image/webp" hidden>
+        </div>
+      </div>
+
+      <div class="fields" id="fields">
+        <div class="field" data-key="TITLE">
+          <input id="f_TITLE" class="md-input" type="text" placeholder=" " autocomplete="off">
+          <label for="f_TITLE">Название</label>
+        </div>
+        <div class="field" data-key="ARTIST">
+          <input id="f_ARTIST" class="md-input" type="text" placeholder=" " autocomplete="off">
+          <label for="f_ARTIST">Артист</label>
+        </div>
+        <div class="field" data-key="ALBUM">
+          <input id="f_ALBUM" class="md-input" type="text" placeholder=" " autocomplete="off">
+          <label for="f_ALBUM">Альбом</label>
+        </div>
+        <div class="field-row">
+          <div class="field narrow" data-key="YEAR">
+            <input id="f_YEAR" class="md-input" type="text" placeholder=" " autocomplete="off">
+            <label for="f_YEAR">Год</label>
+          </div>
+          <div class="field narrow" data-key="TRACK">
+            <input id="f_TRACK" class="md-input" type="text" placeholder=" " autocomplete="off">
+            <label for="f_TRACK">Трек</label>
+          </div>
+        </div>
+        <div class="field" data-key="GENRE">
+          <input id="f_GENRE" class="md-input" type="text" placeholder=" " list="genreList" autocomplete="off">
+          <label for="f_GENRE">Жанр</label>
+          <datalist id="genreList"></datalist>
+        </div>
+        <div class="field" data-key="COMMENT">
+          <input id="f_COMMENT" class="md-input" type="text" placeholder=" " autocomplete="off">
+          <label for="f_COMMENT">Комментарий</label>
+        </div>
+
+        <details class="more" id="moreFields">
+          <summary>Дополнительно</summary>
+          <div class="field" data-key="ALBUMARTIST">
+            <input id="f_ALBUMARTIST" class="md-input" type="text" placeholder=" " autocomplete="off">
+            <label for="f_ALBUMARTIST">Альбомный артист</label>
+          </div>
+          <div class="field" data-key="COMPOSER">
+            <input id="f_COMPOSER" class="md-input" type="text" placeholder=" " autocomplete="off">
+            <label for="f_COMPOSER">Композитор</label>
+          </div>
+          <div class="field-row">
+            <div class="field narrow" data-key="DISCNUMBER">
+              <input id="f_DISCNUMBER" class="md-input" type="text" placeholder=" " autocomplete="off">
+              <label for="f_DISCNUMBER">Диск</label>
+            </div>
+            <div class="field narrow" data-key="BPM">
+              <input id="f_BPM" class="md-input" type="text" placeholder=" " autocomplete="off">
+              <label for="f_BPM">BPM</label>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="editor-foot">
+        <button class="btn filled wide" id="btnSaveFields" disabled>
+          <svg viewBox="0 0 24 24" class="ic"><path d="M5 4h11l3 3v13H5V4Zm3 1.5v5h8v-5M8 13.5h8v6H8z"/></svg>
+          <span>Применить изменения</span>
+        </button>
+        <button class="btn text small" id="btnRevert" disabled>Отменить правки</button>
+      </div>
+    </aside>
+
+    <section class="listpane">
+      <div class="list-head">
+        <div class="list-tools">
+          <div class="search">
+            <svg viewBox="0 0 24 24" class="ic"><circle cx="11" cy="11" r="6.2"/><path d="m15.6 15.6 4 4"/></svg>
+            <input id="search" type="search" placeholder="Поиск по таблице…" autocomplete="off">
+          </div>
+          <span class="list-info" id="listInfo"></span>
+          <button class="icon-btn small" id="btnReload" title="Обновить список (F5)">
+            <svg viewBox="0 0 24 24" class="ic"><path d="M20 12a8 8 0 1 1-2.4-5.7M20 4.5V10h-5.4"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="table-scroll" id="tableScroll" tabindex="-1">
+        <div class="thead" id="thead"></div>
+        <div class="tbody" id="tbody"></div>
+        <div class="empty-state" id="emptyState">
+          <div class="empty-inner">
+            <svg viewBox="0 0 24 24" class="ic hero"><path d="M9 18V5.5l10-2v12"/><circle cx="6.4" cy="18.4" r="2.6"/><circle cx="16.4" cy="16" r="2.6"/></svg>
+            <h2>Библиотека пуста</h2>
+            <p>Выберите папку с музыкой или добавьте её к списку.<br>
+               Поддерживаются MP3, FLAC, OGG, Opus, M4A, WMA, APE, WAV, AIFF, WV, MPC.</p>
+            <button class="btn filled" id="btnPickEmpty">Выбрать папку</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ───────────────────────────────── status bar ────────────────────── -->
+  <footer class="statusbar">
+    <div class="status-left">
+      <span id="statCount">0 файлов</span>
+      <span class="dot"></span>
+      <span id="statSel">ничего не выбрано</span>
+      <span class="dot"></span>
+      <span id="statTotal">0:00</span>
+    </div>
+    <div class="status-right">
+      <span id="statFolder" class="folder-path"></span>
+    </div>
+  </footer>
+</div>
+
+<!-- ───────────────────────────────── dialogs ────────────────────────── -->
+<div class="scrim" id="scrim" hidden></div>
+
+<section class="dialog" id="dlgRenamer" hidden role="dialog" aria-modal="true">
+  <header class="dialog-head">
+    <h2>Конвертер: имя файла ⇄ тег</h2>
+    <button class="icon-btn" data-close="dlgRenamer" title="Закрыть">
+      <svg viewBox="0 0 24 24" class="ic"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+  </header>
+  <div class="dialog-body">
+    <div class="segmented" id="renMode">
+      <button class="seg active" data-mode="tag2file">Тег → Имя файла</button>
+      <button class="seg" data-mode="file2tag">Имя файла → Тег</button>
+    </div>
+    <div class="field flush" id="renMaskField">
+      <input id="renMask" class="md-input" type="text" placeholder=" " autocomplete="off">
+      <label for="renMask">Маска</label>
+    </div>
+    <div class="chips" id="macroChips"></div>
+    <div class="preview-wrap">
+      <div class="preview-head" id="renPreviewHead">Предпросмотр</div>
+      <div class="preview" id="renPreview"></div>
+    </div>
+    <p class="hint" id="renHint"></p>
+  </div>
+  <footer class="dialog-foot">
+    <button class="btn text" data-close="dlgRenamer">Отмена</button>
+    <button class="btn filled" id="btnRenameApply">Применить</button>
+  </footer>
+</section>
+
+<section class="dialog wide" id="dlgExtended" hidden role="dialog" aria-modal="true">
+  <header class="dialog-head">
+    <div>
+      <h2>Расширенные теги</h2>
+      <p class="dialog-sub" id="extSub"></p>
+    </div>
+    <button class="icon-btn" data-close="dlgExtended" title="Закрыть">
+      <svg viewBox="0 0 24 24" class="ic"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+  </header>
+  <div class="dialog-body tight">
+    <div class="ext-toolbar">
+      <div class="search grow">
+        <svg viewBox="0 0 24 24" class="ic"><circle cx="11" cy="11" r="6.2"/><path d="m15.6 15.6 4 4"/></svg>
+        <input id="extSearch" type="search" placeholder="Фильтр по ключу или значению…" autocomplete="off">
+      </div>
+      <button class="btn tonal small" id="extAdd">+ Поле</button>
+      <button class="btn text small danger" id="extDelSel" disabled>Удалить</button>
+    </div>
+    <div class="ext-list" id="extList"></div>
+    <div class="ext-pics">
+      <h3>Встроенные изображения <span id="extPicCount"></span></h3>
+      <div class="ext-pic-list" id="extPics"></div>
+    </div>
+  </div>
+  <footer class="dialog-foot">
+    <span class="foot-note" id="extNote"></span>
+    <button class="btn text" data-close="dlgExtended">Отмена</button>
+    <button class="btn filled" id="extSave">Сохранить теги</button>
+  </footer>
+</section>
+
+<section class="dialog narrow" id="dlgAbout" hidden role="dialog" aria-modal="true">
+  <header class="dialog-head">
+    <h2>О программе</h2>
+    <button class="icon-btn" data-close="dlgAbout" title="Закрыть">
+      <svg viewBox="0 0 24 24" class="ic"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+  </header>
+  <div class="dialog-body">
+    <div class="about-head">
+      <svg viewBox="0 0 40 40" class="about-mark"><rect x="1" y="1" width="38" height="38" rx="11" fill="var(--md-primary)"/><path d="M15 27V13.4l11-2.2v13.1" stroke="#121212" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12.4" cy="27.6" r="3.3" fill="#121212"/><circle cx="23.4" cy="25.4" r="3.3" fill="#121212"/></svg>
+      <div>
+        <div class="about-name">AllTag</div>
+        <div class="about-ver" id="aboutVer"></div>
+      </div>
+    </div>
+    <ul class="about-list">
+      <li>MP3 (ID3v1/v2.2/v2.3/v2.4), FLAC, OGG Vorbis, Opus, M4A/AAC/ALAC, WMA, APE, WAV, AIFF, WV, MPC</li>
+      <li>Пакетное редактирование тегов и обложек</li>
+      <li>Конвертер «Имя файла ⇄ Тег» с масками</li>
+      <li>Интеграция в контекстное меню Windows (HKCU)</li>
+    </ul>
+    <p class="hint">Единый портативный исполняемый файл. Настройки хранятся в %APPDATA%\AllTag.</p>
+  </div>
+  <footer class="dialog-foot">
+    <button class="btn text" id="btnShortcuts">Горячие клавиши</button>
+    <button class="btn filled" data-close="dlgAbout">Закрыть</button>
+  </footer>
+</section>
+
+<section class="dialog narrow" id="dlgKeys" hidden role="dialog" aria-modal="true">
+  <header class="dialog-head">
+    <h2>Горячие клавиши</h2>
+    <button class="icon-btn" data-close="dlgKeys" title="Закрыть">
+      <svg viewBox="0 0 24 24" class="ic"><path d="m6 6 12 12M18 6 6 18"/></svg>
+    </button>
+  </header>
+  <div class="dialog-body">
+    <div class="keys">
+      <div><kbd>Ctrl</kbd>+<kbd>O</kbd><span>Выбрать папку</span></div>
+      <div><kbd>Ctrl</kbd>+<kbd>S</kbd><span>Сохранить теги</span></div>
+      <div><kbd>Ctrl</kbd>+<kbd>E</kbd><span>Расширенные теги</span></div>
+      <div><kbd>Ctrl</kbd>+<kbd>R</kbd><span>Конвертер имён</span></div>
+      <div><kbd>Ctrl</kbd>+<kbd>A</kbd><span>Выделить всё</span></div>
+      <div><kbd>Shift</kbd>/<kbd>Ctrl</kbd>+клик<span>Выделение диапазона</span></div>
+      <div><kbd>↑</kbd><kbd>↓</kbd><span>Навигация по списку</span></div>
+      <div><kbd>F5</kbd><span>Обновить список</span></div>
+      <div><kbd>Del</kbd><span>Очистить поле в фокусе</span></div>
+    </div>
+  </div>
+  <footer class="dialog-foot">
+    <button class="btn filled" data-close="dlgKeys">Понятно</button>
+  </footer>
+</section>
+
+<div class="menu" id="appMenu" hidden>
+  <button data-action="keys">Горячие клавиши</button>
+  <button data-action="about">О программе</button>
+  <button data-action="reveal">Показать папку в проводнике</button>
+  <div class="menu-sep"></div>
+  <button data-action="quit">Выход</button>
+</div>
+
+<div class="rowmenu" id="rowMenu" hidden>
+  <button data-action="extended">Расширенные теги…</button>
+  <button data-action="rename">Переименовать по тегам…</button>
+  <button data-action="reveal">Показать в проводнике</button>
+  <button data-action="copy">Копировать имя файла</button>
+</div>
+
+<div class="snackbar" id="snackbar" hidden><span id="snackText"></span>
+  <button class="snack-action" id="snackAction" hidden></button>
+</div>
+
+<script src="js/util.js"></script>
+<script src="js/api.js"></script>
+<script src="js/table.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/dialogs.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
