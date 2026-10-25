@@ -27,6 +27,9 @@ func fatal(title, msg string)                   { fmt.Fprintf(os.Stderr, "%s: %s
 
 func runUI(url, dataDir string, paths []string, onPaths func([]string), onQuit func()) error {
 	fmt.Printf("AllTag dev server: %s\n", url)
+	if os.Getenv("ALLTAG_OPEN") != "" {
+		_ = (&devPlatform{}).OpenURL(url)
+	}
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt, syscall.SIGTERM)
 	<-ch

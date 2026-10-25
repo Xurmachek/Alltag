@@ -49,10 +49,20 @@ type Server struct {
 	lastPing    time.Time
 }
 
-// NewServer builds a server bound to 127.0.0.1 on a free port.
+// ListenAddr is where the UI is served. It is loopback with a free port for the
+// shipped program; ALLTAG_LISTEN overrides it for UI development and for
+// running the interface in an ordinary browser on another machine.
+func listenAddr() string {
+	if v := os.Getenv("ALLTAG_LISTEN"); v != "" {
+		return v
+	}
+	return "127.0.0.1:0"
+}
+
+// NewServer builds a server bound to the loopback interface on a free port.
 func NewServer(lib *Library, plat Platform, assets embed.FS, settings *Settings) (*Server, error) {
 	s := &Server{Lib: lib, Plat: plat, Assets: assets, Settings: settings}
-	ln, err := net.Listen("tcp", "127.0.0.1:0")
+	ln, err := net.Listen("tcp", listenAddr())
 	if err != nil {
 		return nil, err
 	}
